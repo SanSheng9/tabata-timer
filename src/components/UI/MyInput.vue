@@ -28,7 +28,6 @@ export default {
    
 }
 .input:focus{
-   font-size: 24px;
 }
 input::placeholder{
    color: rgb(218, 218, 218)

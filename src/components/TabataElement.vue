@@ -1,6 +1,8 @@
 <template>
 <div class="elements">
-<my-element class="element">
+<my-element :tumbler='tumblerEdit' class="element">
+    <div class="block">
+        <div class="block-text">
             <div class="name">
                 {{tab.name}}
             </div>
@@ -20,8 +22,18 @@
                 <div class="time">
                     Time: {{secondsToHms(time)}}
                 </div>
-                <div class="buttons"></div>
+
             </div>
+        </div>
+        <div class="block-buttons">
+                    <div class="play">
+                        <img src="@/assets/play.svg" alt="">
+                    </div>
+                    <div class="edit" @click="openEdit">
+                        <img src="@/assets/edit.svg" alt="">
+                    </div>   
+        </div>
+    </div>
 </my-element>
 </div>
 </template>
@@ -39,7 +51,8 @@ export default {
         return{
             time: ((props.tab.work + props.tab.rest) * props.tab.cycles) + props.tab.prep,
             colorElem: String(props.tab.color),
-            colorElemHover: 'dark' + String(props.tab.color)
+            colorElemHover: 'dark' + String(props.tab.color),
+            tumblerEdit: false
         }
     },
     methods: {
@@ -49,6 +62,10 @@ export default {
             var m = Math.floor(d % 3600 / 60);
             var s = Math.floor(d % 3600 % 60);
             return ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
+        },
+        openEdit(){
+            this.$emit('edit'),
+            this.tumblerEdit = !this.tumblerEdit
         }
     }
 }
@@ -59,11 +76,26 @@ export default {
 .element{
 background-color: v-bind(colorElem);
 }
-.element:hover{
-background-color: v-bind(colorElemHover);
-}
 .name{
     font-size: 28px;
     margin-bottom: 10px;
+}
+
+.element .play,
+.element .edit{
+    max-width: 11vw;
+}
+.element img{
+    max-width: 100%;
+}
+.block{
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+}
+.block-buttons{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
-<div class="element" @click="openCloseElement" :class="{opened: tumblerElement}">
+<div class="element" :class="{opened: tumbler}">
     <div class="container">
-        <div class="content" @click.stop>
+        <div class="content">
             <slot></slot>
         </div>
     </div>
@@ -11,16 +11,18 @@
 <script>
 export default {
     name: 'my-element',
+    props: {
+        tumbler: {
+            type: Boolean,
+            default: false
+        }
+    },
     data() {
     return {
-        tumblerElement: false
     }
     },
     methods: {
-        openCloseElement(){
-            this.tumblerElement = !this.tumblerElement
-            this.$emit('tumbler', this.tumblerElement)
-        }
+
     }
 }
 </script>
@@ -43,9 +45,9 @@ transition: all 1s ease 0s;
     padding-bottom: 5%;
 }
 .element.opened{
-    position: absolute;
-    top: 1vh;
-    left: 1vh;
+    position: relative;
+    top: 0vh;
+    left: 0vh;
     z-index: 2;
     min-height: 98vh;
     min-width: 96vw;

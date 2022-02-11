@@ -1,9 +1,9 @@
 <template>
 <div class="tabata-block">
 <tabata-element v-for="tab in tabata" :key="tab.id" :tab="tab"></tabata-element>
-<my-element @tumbler='openOrCloseForm' class="create">
-        <p v-if="tumblerForm == false">Create new tabata? </p>
-        <tabata-form @color='changeColorTabataCreate' v-if="tumblerForm == true"></tabata-form>
+<my-element class="create" :tumbler='tumbleForm'>
+        <p v-if="tumblerForm == false" @click="openEdit">Create new tabata? </p>
+        <tabata-form @edit='openEdit' @color='changeColorTabataCreate' v-if="tumblerForm == true"></tabata-form>
 </my-element>
 </div>
 </template>
@@ -31,12 +31,12 @@ export default {
         }
     },
     methods: {
-        openOrCloseForm(tmblr){
-            console.log(tmblr)
-            this.tumblerForm = tmblr
-        },
         changeColorTabataCreate(color){
             this.colorTabataCreate = color
+        },
+        
+        openEdit(){
+            this.tumblerForm = !this.tumblerForm
         }
     }
 }
