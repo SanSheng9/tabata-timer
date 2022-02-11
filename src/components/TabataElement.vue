@@ -1,8 +1,6 @@
 <template>
 <div class="elements">
-  <div class="element">
-    <div class="container">
-        <div class="block-1">
+<my-element class="element">
             <div class="name">
                 {{tab.name}}
             </div>
@@ -24,11 +22,7 @@
                 </div>
                 <div class="buttons"></div>
             </div>
-        </div>
-        <div class="block-2">
-        </div>   
-    </div>
-  </div>
+</my-element>
 </div>
 </template>
 
@@ -61,23 +55,12 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 .element{
-max-width: 100%;
-margin-bottom: 1vw;
-color:azure;
-font-size: 24px;
-min-height: 55vw;
 background-color: v-bind(colorElem);
 }
 .element:hover{
-    background-color: v-bind(colorElemHover);
-}
-.container {
-    max-width: 95%;
-    margin: 0 auto;
-    padding-top: 5%;
-    padding-bottom: 5%;
+background-color: v-bind(colorElemHover);
 }
 .name{
     font-size: 28px;
