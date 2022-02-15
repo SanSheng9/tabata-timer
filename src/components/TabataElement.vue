@@ -4,23 +4,23 @@
     <div class="block" >
         <div v-if="!tumblerEdit" class="block-text">
             <div class="name">
-                {{tab.name}}
+                {{name}}
             </div>
             <div class="options">
                 <div class="prep">
-                    Preparation: {{tab.prep}} sec
+                    Preparation: {{prep}} sec
                 </div>
                 <div class="work">
-                    Work: {{tab.work}} sec
+                    Work: {{work}} sec
                 </div>
                 <div class="rest">
-                    Rest: {{tab.rest}} sec
+                    Rest: {{rest}} sec
                 </div>
                 <div class="cycles">
-                    Cycles: {{tab.cycles}} sec
+                    Cycles: {{cycles}} sec
                 </div>
                 <div class="time">
-                    Time: {{secondsToHms(time)}}
+                    Time: {{secondsToHms(((this.work + this.rest) * this.cycles) + this.prep)}}
                 </div>
 
             </div>
@@ -29,18 +29,19 @@
                     <div class="play">
                         <img src="@/assets/play.svg" alt="">
                     </div>
-                    <div class="edit" @click="openEdit">
+                    <div class="edit" @click="openEdit" >
                         <img src="@/assets/edit.svg" alt="">
                     </div>   
         </div>
         <tabata-form v-if="tumblerEdit" 
-        :name='tab.name' 
-        :prep='tab.prep' 
-        :work='tab.work'
-        :rest='tab.rest'
-        :cycles='tab.cycles'
+        :name='name' 
+        :prep='prep' 
+        :work='work'
+        :rest='rest'
+        :cycles='cycles'
         :view='view'
-        :color='tab.color'
+        :color='color'
+        @create='openAndGoNewTabata'
         class="block-edit"></tabata-form>
     </div>
 </my-element>
@@ -61,11 +62,14 @@ export default {
             required: true
         }
     },
-    data(props){
+    data({ tab }){
         return{
-            time: ((props.tab.work + props.tab.rest) * props.tab.cycles) + props.tab.prep,
-            colorElem: String(props.tab.color),
-            colorElemHover: 'dark' + String(props.tab.color),
+            name: tab.name,
+            work: tab.work,
+            prep: tab.prep,
+            rest: tab.rest,
+            cycles: tab.cycles,
+            color: tab.color,
             tumblerEdit: false,
             view: 'old',
             viewblock: 'row',
@@ -87,6 +91,9 @@ export default {
             arr.reverse
             this.viewbuttons= arr[0]
             this.viewblock = arr[1]
+        },
+        openAndGoNewTabata(tabata){
+            this.$emit('change', tabata)
         }
     }
 }
@@ -95,7 +102,7 @@ export default {
 
 <style scoped>
 .element{
-background-color: v-bind(colorElem);
+background-color: v-bind(color);
 }
 .name{
     font-size: 28px;
@@ -119,7 +126,6 @@ background-color: v-bind(colorElem);
     align-items: center;
     justify-content: space-around;
     margin-right: 3vw;
-    transition: flex 0.2s ease 0s;
     flex-direction: v-bind(viewbuttons);    
 }
 .block-buttons.option{

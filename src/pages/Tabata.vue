@@ -1,5 +1,5 @@
 <template>
-<tabata-list :tabata='tabataArray' @create='addTabata'>
+<tabata-list :tabata='tabataArray' @create='addTabata' @change='editTabata'>
 
 </tabata-list>
 </template>
@@ -16,6 +16,7 @@ export default {
         return {
             tabataArray: [
                 {
+                    id: 0,
                     name: 'Light',
                     color: 'green',
                     prep: 10,
@@ -24,6 +25,7 @@ export default {
                     cycles: 2,
                 },
                 {
+                    id: 1,
                     name: 'Hard',
                     color: 'red',
                     prep: 10,
@@ -37,6 +39,13 @@ export default {
     methods: {
         addTabata(tabata){
             this.tabataArray.push(tabata)
+        },
+        editTabata(tabata, id){
+            this.tabataArray.forEach((tab) =>{
+                if (tab.id == id) {
+                    tab = tabata
+                }
+            })
         }
     }
 }

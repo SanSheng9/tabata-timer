@@ -4,7 +4,7 @@
         <div class="add">
             <img src="@/assets/cancel.svg" alt="" @click='createTabata'>
         </div>
-        <div class="cancel" @click="$emit('edit')">
+        <div class="cancel" @click="closeForm">
             <img src="@/assets/cancel.svg" alt="">
         </div>   
       </div>
@@ -95,7 +95,7 @@ export default {
             tabataWork: props.work,
             tabataRest: props.rest,
             tabataCycles: props.cycles,
-            tabataColor: 'gray',
+            tabataColor: props.color,
             newTabata: [],
             viewButtons: props.view
         }
@@ -116,8 +116,12 @@ export default {
                     cycles: this.tabataCycles,
                 },               
             this.$emit('create', this.newTabata)
-            this.$emit('colorform', 'grey') 
+            this.$emit('colorform', 'gray')
             this.$emit('edit')           
+        },
+        closeForm(){
+            this.$emit('edit'),
+            this.$emit('colorform', 'gray')
         }
     }
 }
