@@ -18,14 +18,16 @@ export default {
 
 <style scoped>
 .input {
-   border: 2px solid white;
+   border: none;
+   border-bottom: 2px solid white;
    height: 2em;
    background-color: rgba(0, 0, 0, 0);
    width: 100%;
    color: rgb(255, 255, 255);
    outline: none;
+   text-align: center;
    transition: all 1s ease 0s;
-   
+   font-size: 28px;
 }
 .input:focus{
 }

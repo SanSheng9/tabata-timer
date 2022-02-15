@@ -1,8 +1,8 @@
 <template>
 <div class="elements">
 <my-element :tumbler='tumblerEdit' class="element">
-    <div class="block">
-        <div class="block-text">
+    <div class="block" >
+        <div v-if="!tumblerEdit" class="block-text">
             <div class="name">
                 {{tab.name}}
             </div>
@@ -25,7 +25,7 @@
 
             </div>
         </div>
-        <div class="block-buttons">
+        <div class="block-buttons" :class='{option: tumblerEdit}'>
                     <div class="play">
                         <img src="@/assets/play.svg" alt="">
                     </div>
@@ -33,13 +33,27 @@
                         <img src="@/assets/edit.svg" alt="">
                     </div>   
         </div>
+        <tabata-form v-if="tumblerEdit" 
+        :name='tab.name' 
+        :prep='tab.prep' 
+        :work='tab.work'
+        :rest='tab.rest'
+        :cycles='tab.cycles'
+        :view='view'
+        :color='tab.color'
+        class="block-edit"></tabata-form>
     </div>
 </my-element>
 </div>
 </template>
 
 <script>
+import TabataForm from "@/components/TabataForm.vue"
+
 export default {
+    components: {
+        TabataForm
+    },
     name: 'tabata-element',
     props: {
         tab: {
@@ -52,7 +66,10 @@ export default {
             time: ((props.tab.work + props.tab.rest) * props.tab.cycles) + props.tab.prep,
             colorElem: String(props.tab.color),
             colorElemHover: 'dark' + String(props.tab.color),
-            tumblerEdit: false
+            tumblerEdit: false,
+            view: 'old',
+            viewblock: 'row',
+            viewbuttons: 'column'
         }
     },
     methods: {
@@ -66,6 +83,10 @@ export default {
         openEdit(){
             this.$emit('edit'),
             this.tumblerEdit = !this.tumblerEdit
+            var arr = [this.viewblock, this.viewbuttons]
+            arr.reverse
+            this.viewbuttons= arr[0]
+            this.viewblock = arr[1]
         }
     }
 }
@@ -83,19 +104,31 @@ background-color: v-bind(colorElem);
 
 .element .play,
 .element .edit{
-    max-width: 11vw;
+    max-width: 12vw;
 }
 .element img{
     max-width: 100%;
 }
 .block{
-    display: grid;
-    grid-template-columns: 3fr 1fr;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: v-bind(viewblock);
 }
 .block-buttons{
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-around;
+    margin-right: 3vw;
+    transition: flex 0.2s ease 0s;
+    flex-direction: v-bind(viewbuttons);    
+}
+.block-buttons.option{
+    flex-direction: row;
+    flex: 1 1 auto;
+    margin-right: 0;
+    margin-top: 3vw;
+}
+
+.block-buttons.option .play{
 }
 </style>

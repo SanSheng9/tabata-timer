@@ -1,5 +1,5 @@
 <template>
-<tabata-list :tabata='tabataArray'>
+<tabata-list :tabata='tabataArray' @create='addTabata'>
 
 </tabata-list>
 </template>
@@ -35,7 +35,9 @@ export default {
         }
     }, 
     methods: {
-
+        addTabata(tabata){
+            this.tabataArray.push(tabata)
+        }
     }
 }
 </script>

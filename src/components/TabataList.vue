@@ -3,7 +3,7 @@
 <tabata-element v-for="tab in tabata" :key="tab.id" :tab="tab"></tabata-element>
 <my-element class="create" :tumbler='tumbleForm'>
         <p v-if="tumblerForm == false" @click="openEdit">Create new tabata? </p>
-        <tabata-form @edit='openEdit' @color='changeColorTabataCreate' v-if="tumblerForm == true"></tabata-form>
+        <tabata-form @edit='openEdit' :view='view' @colorform='changeColorTabataCreate' @create='openAndGoNewTabata' v-if="tumblerForm == true"></tabata-form>
 </my-element>
 </div>
 </template>
@@ -27,7 +27,9 @@ export default {
     data(){
         return{
             tumblerForm: false,
-            colorTabataCreate: 'gray'
+            colorTabataCreate: 'gray',
+            newTabataFromForm: '',
+            view: 'new'
         }
     },
     methods: {
@@ -37,6 +39,10 @@ export default {
         
         openEdit(){
             this.tumblerForm = !this.tumblerForm
+        },
+        openAndGoNewTabata(newTabata){
+            this.$emit("create", newTabata)
+            this.newTabataFromForm = newTabata
         }
     }
 }
