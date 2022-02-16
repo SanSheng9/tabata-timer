@@ -20,12 +20,12 @@
                     Cycles: {{tab.cycles}} sec
                 </div>
                 <div class="time">
-                    Time: {{secondsToHms(time)}}
+                    Time: {{secondsToHms(((tab.work + tab.rest) * tab.cycles) + tab.prep)}}
                 </div>
 
             </div>
         </div>
-        <div class="block-buttons" :class='{option: tumblerEdit}'>
+        <div class="block-buttons" v-if='!tumblerEdit'>
                     <div class="play">
                         <img src="@/assets/play.svg" alt="">
                     </div>
@@ -34,13 +34,17 @@
                     </div>   
         </div>
         <tabata-form v-if="tumblerEdit" 
-        :name='tab.name' 
+        :name='tab.name'
+        :id='tab.id' 
         :prep='tab.prep' 
         :work='tab.work'
         :rest='tab.rest'
         :cycles='tab.cycles'
         :view='view'
         :color='tab.color'
+        @edit='openEdit'
+        @create='optionTabata'
+        @colorform='changeColorElement'
         class="block-edit"></tabata-form>
     </div>
 </my-element>
@@ -63,7 +67,6 @@ export default {
     },
     data(props){
         return{
-            time: ((props.tab.work + props.tab.rest) * props.tab.cycles) + props.tab.prep,
             colorElem: String(props.tab.color),
             colorElemHover: 'dark' + String(props.tab.color),
             tumblerEdit: false,
@@ -87,8 +90,15 @@ export default {
             arr.reverse
             this.viewbuttons= arr[0]
             this.viewblock = arr[1]
+        },
+        optionTabata(element){
+            this.$emit("option", element)
+            console.log('2:', element)
+        },
+        changeColorElement(color){
+            this.colorElem = String(color)
         }
-    }
+    },
 }
 
 </script>
@@ -119,16 +129,8 @@ background-color: v-bind(colorElem);
     align-items: center;
     justify-content: space-around;
     margin-right: 3vw;
-    transition: flex 0.2s ease 0s;
+    transition: flex 0.2s linear 0s;
     flex-direction: v-bind(viewbuttons);    
 }
-.block-buttons.option{
-    flex-direction: row;
-    flex: 1 1 auto;
-    margin-right: 0;
-    margin-top: 3vw;
-}
 
-.block-buttons.option .play{
-}
 </style>

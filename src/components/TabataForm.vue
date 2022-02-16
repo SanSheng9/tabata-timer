@@ -1,12 +1,20 @@
 <template>
   <div class="tabata-form">
-      <div class="buttons" v-if="viewButtons == 'new'">
+      <div class="buttons new" v-if="viewButtons == 'new'">
         <div class="add">
             <img src="@/assets/cancel.svg" alt="" @click='createTabata'>
         </div>
         <div class="cancel" @click="$emit('edit')">
             <img src="@/assets/cancel.svg" alt="">
-        </div>   
+        </div>
+        </div>
+        <div class="buttons old" v-if="viewButtons == 'old'">
+        <div class="play">
+            <img src="@/assets/play.svg" alt="">
+        </div>
+        <div class="set" @click="createTabata">
+            <img src="@/assets/edit.svg" alt="">
+        </div>     
       </div>
       <div class="form name">
       <label for="name">Name</label>
@@ -62,6 +70,10 @@ export default {
             type: String,
             default: 'My Tabata'
         },
+        id: {
+            type: Number,
+            required: true
+        },
         color: {
             type: String,
             default: 'gray'
@@ -85,19 +97,25 @@ export default {
         view: {
             type: String,
             required: true
+        },
+        count: {
+            type: Number,
+            default: 2
         }
     },
     data(props){
         return {
             colorFromForm: '',
             tabataName: props.name,
+            tabataId: props.id,
             tabataPrep: props.prep,
             tabataWork: props.work,
             tabataRest: props.rest,
             tabataCycles: props.cycles,
-            tabataColor: 'gray',
+            tabataColor: props.color,
             newTabata: [],
-            viewButtons: props.view
+            viewButtons: props.view,
+            countId: props.count
         }
     },
     methods: {
@@ -106,9 +124,15 @@ export default {
             this.$emit('colorform', color)
         },
         createTabata(){
+            if (this.viewButtons == 'new') {
+                this.tabataId = this.countId
+                this.countId = this.countId + 1
+                this.$emit('count', this.countId)
+            }
             this.newTabata = 
                 {
                     name: this.tabataName,
+                    id: this.tabataId,
                     color: this.tabataColor,
                     prep: this.tabataPrep,
                     work: this.tabataWork,
@@ -116,7 +140,8 @@ export default {
                     cycles: this.tabataCycles,
                 },               
             this.$emit('create', this.newTabata)
-            this.$emit('colorform', 'grey') 
+            console.log('1:', this.newTabata)
+            if (this.viewButtons == 'new') {this.$emit('colorform', 'grey')} 
             this.$emit('edit')           
         }
     }
@@ -147,9 +172,12 @@ export default {
     flex-direction: column;
 }
 .tabata-form .add,
-.tabata-form .cancel{
-    max-width: 11vw;
+.tabata-form .cancel,
+.tabata-form .play,
+.tabata-form .set{
+    max-width: 12vw;
 }
+
 .tabata-form .add{
     transform: rotate(45deg);
 }

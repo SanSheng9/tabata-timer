@@ -1,9 +1,9 @@
 <template>
 <div class="tabata-block">
-<tabata-element v-for="tab in tabata" :key="tab.id" :tab="tab"></tabata-element>
+<tabata-element v-for="tab in tabata" :key="tab.id" :tab="tab" @option='optionTabata'></tabata-element>
 <my-element class="create" :tumbler='tumbleForm'>
         <p v-if="tumblerForm == false" @click="openEdit">Create new tabata? </p>
-        <tabata-form @edit='openEdit' :view='view' @colorform='changeColorTabataCreate' @create='openAndGoNewTabata' v-if="tumblerForm == true"></tabata-form>
+        <tabata-form @edit='openEdit' :view='view' :count='count' @count='changeCount' @colorform='changeColorTabataCreate' @create='openAndGoNewTabata' v-if="tumblerForm == true"></tabata-form>
 </my-element>
 </div>
 </template>
@@ -28,8 +28,9 @@ export default {
         return{
             tumblerForm: false,
             colorTabataCreate: 'gray',
-            newTabataFromForm: '',
-            view: 'new'
+            tabataId: '',
+            view: 'new',
+            count: 2,
         }
     },
     methods: {
@@ -43,6 +44,13 @@ export default {
         openAndGoNewTabata(newTabata){
             this.$emit("create", newTabata)
             this.newTabataFromForm = newTabata
+        },
+        optionTabata(element){
+            console.log('3,2:', element)
+            this.$emit('option', element)
+        },
+        changeCount(countId){
+            this.count = countId
         }
     }
 }
