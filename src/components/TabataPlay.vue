@@ -1,16 +1,12 @@
 <template>
   <div class="tabata-timer">
       <div class="timer">
-        <div class="diagram progress" data-percent="18" @click='progressView'>
-    <div class="piece left"></div>
-    <div class="piece right"></div>
-    <div class="text">
-        <div>
-            <b>18</b>
-            <span>PERCENT</span>
+        <div class="timer-line"></div>
+        <div class="timer-body">
+            <div class="timer-couner">
+                <span class="second">1</span>
+            </div>
         </div>
-    </div>
-</div>
       </div>
   </div>
 </template>
@@ -55,89 +51,17 @@ export default {
   transition: background-color 0.5s ease 0s;
   min-height: 100vh;
   min-width: 100vw;  
+      display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .timer{
-}
-.diagram {
-    margin: 0 auto;
-    width: 250px;
-    height:250px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
-    background: #990;
+    background-color: #fff;
+    overflow: hidden;
     position: relative;
-    overflow: hidden;
-}
-.diagram::before {
-    content: '';
-    display: block;
-    position: absolute;
-    top:20px;
-    left:20px;
-    right:20px;
-    bottom:20px;
-    border-radius: 50%;
-    background: #ccc;
-    z-index: 3;
-    opacity: 1;
-}
-.diagram .piece {
-    width: 100%;
-    height: 100%;
-    left: 0;
-    right: 0;
-    overflow: hidden;
-    position: absolute;
-}
-.diagram .piece::before {
-    content: '';
-    display: block;
-    position: absolute;
-    width: 50%;
-    height: 100%;
-}
-.diagram .piece.left {
-    transform: rotate(0deg);
-    z-index: 2;
-    border-radius: 50%; /* only FireFox < 75.0v (fix bug)*/
-}
-.diagram.over_50 .piece.left {
-    transform: rotate(180deg);
-}
-.diagram .piece.right {
-    transform: rotate(180deg);
-    z-index: 1;
-    border-radius: 50%; /* only FireFox < 75.0v (fix bug)*/
-}
-.diagram.over_50 .piece.right {
-    transform: rotate(360deg);
-}
-.diagram .left::before {
-    background: #059;
-}
-.diagram.over_50 .left::before {
-    background: #990;
-}
-.diagram .right::before {
-    background: #059;
-}
-.diagram .text {
-    position: absolute;
-    z-index: 3;
-    top: 0;
-    bottom: 0;
-    left:0;
-    right:0;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.diagram .text b {
-    font-size: 72px;
-}
-.diagram .text span {
-    font-size: 16px;
-    display: block;
 }
 
 </style>
