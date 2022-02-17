@@ -1,6 +1,9 @@
 <template>
 <div class="tabata-block">
-<tabata-play class="tabata-play" :color='colorElementPlayed' :element='elemPlayed'>
+<tabata-play class="tabata-play" 
+:color='colorElementPlayed'
+ :element='elemPlayed' 
+ :animation='animationPlayedState'>
 </tabata-play>
 <div class="tabata-list">
 <transition-group name="list">
@@ -43,7 +46,8 @@ export default {
             elemPlayed: '',
             topPlay: -101 + '%',
             leftPlay: -1 + '%',
-            position: 'block'        
+            position: 'block',
+            animationPlayedState: 'paused'        
             }
     },
     methods: {
@@ -65,12 +69,13 @@ export default {
         changeCount(countId){
             this.count = countId
         },
-        playTabata(color, elem){
-            this.colorElementPlayed = color;
+        playTabata(elem){
+            this.colorElementPlayed = elem.color;
             this.elemPlayed = elem
             this.topPlay = -1 + '%'
             this.leftPlay = -1 + '%'
             this.position = 'fixed'
+            this.animationPlayedState = 'running'
         }
     }
 }
