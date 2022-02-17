@@ -166,6 +166,7 @@ export default {
     align-items: center;
     justify-content: space-evenly;
     margin-bottom: 2vh;
+    overflow: hidden;
 }
 .form.name{
     display: flex;

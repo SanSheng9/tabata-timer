@@ -1,5 +1,8 @@
 <template>
-<tabata-list :tabata='tabataArray' @create='addTabata' @option='editTabata'>
+<tabata-list :tabata='tabataArray' 
+@create='addTabata' 
+@option='editTabata' 
+>
 
 </tabata-list>
 </template>
@@ -33,7 +36,8 @@ export default {
                     rest: 10,
                     cycles: 3
                 }                
-            ]
+            ],
+            position: 'block'
         }
     }, 
     methods: {
@@ -46,11 +50,12 @@ export default {
             this.tabataArray.forEach( (currentValue, i, arr) => {
                 if (currentValue.id == tab.id) {arr[i] = tab}
             } )
-        }
+        },
     }
 }
 </script>
 
 <style>
-
+*{
+}
 </style>

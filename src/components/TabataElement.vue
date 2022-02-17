@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="block-buttons" v-if='!tumblerEdit'>
-                    <div class="play">
+                    <div class="play" @click='$emit("play", colorElem, tab)'>
                         <img src="@/assets/play.svg" alt="">
                     </div>
                     <div class="edit" @click="openEdit">
