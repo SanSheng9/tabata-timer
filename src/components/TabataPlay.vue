@@ -4,7 +4,7 @@
         <div class="timer-line"></div>
         <div class="timer-body">
             <div class="timer-couner">
-                <span class="second">{{sec()}}
+                <span class="second">{{ currentTime }}
                 </span>
             </div>
         </div>
@@ -15,39 +15,43 @@
 <script>
 export default {
     name: 'tabata-play',
-    props: {
-        color: {
-            type: String,
-            required: true
-        },
-        element: {
-            type: Object,
-            required: true
-        },
-        animation: {
-            type: String,
-            default: 'paused'
-        }
-    },
-    data({element}){
+    props: [
+        'animation', 'color', 'work', 'rest', 'prep', 'cycles'
+    ],
+    data(){
         return {
-            activatedElement: element,
-            fullTime: ''
+            workPlayed: this.work,
+            prepPlayed: this.prep,
+            restPlayed: this.rest,
+            cyclesPlayed: this.cycles,
+            time: ((this.work + this.rest) * this.cycles) + this.prep,
+            currentTime: 0
         }
     },
     methods: { 
-        sec(){
-            this.fullTime = ((this.activatedElement.work + this.activatedElement.rest) * this.activatedElement.cycles) + this.activatedElement.prep
-            return setInterval(() => {
-                if (this.work > 0) {
-                    this.work - 1
-                }
-                return this.work
-            }, this.fullTime);
+        startTimer() {
+            this.currentTime = this.time
+            setTimeout(() => {
+             this.timer = setInterval(() => {
+            this.currentTime--}, 1000)   
+            }, 1000);
             
+        },
+        stopTimer() {
+            clearTimeout(this.timer)
+        },
+    },
+    watch: {
+        animation: function () {
+            this.startTimer()
+        },
+        currentTime(time) {
+            if (time === 0) {
+                this.stopTimer()
+            }
         }
-
-    }
+    },
+    
 }
 </script>
 
@@ -83,7 +87,8 @@ export default {
     height: 100%;
     z-index: 3;
     background-color: #333;
-    animation: mask_left 10s steps(1, end) forwards;
+    animation: mask_left 1s steps(1, end) forwards;
+    animation-duration: v-bind(currentTime);
       animation-play-state: v-bind(animation);  
 
 }
@@ -96,7 +101,9 @@ export default {
     height: 100%;
     z-index: 3;
     background-color: white;
-    animation: mask_right 10s steps(1, end) forwards;
+    animation: mask_righ 1s steps(1, end) forwards;
+        animation-duration: v-bind(currentTime);
+
       animation-play-state: v-bind(animation);  
 
 }
@@ -108,6 +115,8 @@ export default {
     height: 100%;
     z-index: 2;
     animation: line 10s linear forwards;
+        animation-duration: v-bind(currentTime);
+
       animation-play-state: v-bind(animation);  
 
 }
