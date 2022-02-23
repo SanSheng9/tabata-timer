@@ -1,12 +1,14 @@
 <template>
 <div class="tabata-block">
-<tabata-play class="tabata-play" 
+<tabata-play v-show="showPlay" class="tabata-play" 
 :color='colorElementPlayed'
  :work='workPlay' 
  :prep='prepPlay'
  :rest='restPlay'
  :cycles='cyclesPlay'
  :animation='animationPlayedState'
+ :play='playTumbler'
+ @finish='finishTabata'
 >
 </tabata-play>
 <div class="tabata-list">
@@ -55,7 +57,9 @@ export default {
             workPlay: '',
             prepPlay: '',
             restPlay: '',
-            cyclesPlay: ''
+            cyclesPlay: '',
+            playTumbler: false,
+            showPlay: false
             }
     },
     methods: {
@@ -83,10 +87,15 @@ export default {
             this.restPlay = elem.rest
             this.cyclesPlay = elem.cycles
             this.colorElementPlayed = elem.color
-            this.topPlay = -1 + '%'
-            this.leftPlay = -1 + '%'
             this.position = 'fixed'
+            this.playTumbler = !this.playTumbler
+            this.showPlay = true
             this.animationPlayedState = 'running'
+        },
+        finishTabata(){
+            this.position = 'static'
+            this.showPlay = false
+            this.animationPlayedState = 'paused'
         }
     }
 }
@@ -126,7 +135,7 @@ export default {
     min-height: 103vh;
     min-width: 103vw;
     position: fixed;
-    top: v-bind(topPlay);
-    left: v-bind(leftPlay);
+    top: 0;
+    left: 0;
 }
 </style>

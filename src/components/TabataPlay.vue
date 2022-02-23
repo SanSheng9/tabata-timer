@@ -1,7 +1,7 @@
 <template>
   <div class="tabata-timer">
-      <div class="timer">
-        <div class="timer-line"></div>
+      <div class="timer" :class='{animation: animClass}'>
+        <div class="timer-line" :class='{animation: animClass}'></div>
         <div class="timer-body">
             <div class="timer-couner">
                 <span class="second">{{ currentTime }}
@@ -9,35 +9,50 @@
             </div>
         </div>
       </div>
+      <div class="stage">
+          <p>{{stage}}</p>
+      </div>
   </div>
 </template>
 
 <script>
 export default {
+    emit: 'finish',
     name: 'tabata-play',
     props: [
-        'animation', 'color', 'work', 'rest', 'prep', 'cycles'
+        'animation', 'color', 'work', 'rest', 'prep', 'cycles', 'play'
     ],
     data(){
         return {
-            workPlayed: this.work,
-            prepPlayed: this.prep,
-            restPlayed: this.rest,
-            cyclesPlayed: this.cycles,
-            time: ((this.work + this.rest) * this.cycles) + this.prep,
+            playStart: true,
             currentTime: 0,
             duration: 0,
+            animClass: true,
+            stage: ''
         }
     },
-    methods: { 
+    methods: {
+        addDeleteClass() {
+                this.animClass = false
+                console.log('animation')
+                setTimeout(() => {this.animClass = true}, 10)
+        },
+        finishTabata(){
+            this.$emit('finish')
+        },
         startTimer(cycl) {
                 let count = cycl
                 new Promise((resolve) => {
                     // Preparation
                 let preparation = this.prep
-                if (this.cycles == count) {
+                if (this.cycles == count && preparation > 0) {
                 console.log('Start Prep')
                 this.currentTime = preparation
+                //
+                this.addDeleteClass()  
+                //            
+                this.duration = this.currentTime + 's'
+                this.stage = 'Preparation'
                 this.timer = setInterval(() => {
                 this.currentTime--
                 if (this.currentTime <= 0)
@@ -53,6 +68,12 @@ export default {
                     new Promise((resolve) => {
                         console.log('Start Work')
                         this.currentTime = this.work
+                //
+                this.addDeleteClass()  
+
+                //                                    
+                        this.duration = this.currentTime + 's'
+                        this.stage = 'Work'
                         this.timer = setInterval(() => {
                         this.currentTime--
                         if (this.currentTime <= 0)
@@ -66,6 +87,11 @@ export default {
                         new Promise((resolve) => {
                         console.log('Start Rest')
                         this.currentTime = this.rest
+                //
+                this.addDeleteClass()  
+                //                                    
+                        this.duration = this.currentTime + 's'
+                        this.stage = 'Rest'
                         this.timer = setInterval(() => {
                         this.currentTime--
                         if (this.currentTime <= 0)
@@ -82,6 +108,8 @@ export default {
                             count--
                             resolve(
                             this.startTimer(count))
+                        } else if (count <= 1) {console.log('ELSE')
+                        this.finishTabata()
                         }
                         })
                     })
@@ -91,7 +119,7 @@ export default {
         },
     },
     watch: {
-        animation: function () {
+        play: function () {
             this.startTimer(this.cycles)
         },
       //  currentTime(time) {
@@ -127,7 +155,7 @@ export default {
     align-items: center;
     z-index: 2;
 }
-.timer::before {
+.timer.animation::before {
     content: '';
     position: absolute;
     top: 0;
@@ -137,13 +165,13 @@ export default {
     z-index: 3;
     background-color: #333;
     animation-name: mask_left;
-    animation-duration: v-bind(currentTime);
+    animation-duration: v-bind(duration);
     animation-timing-function: steps(1, end);
-    animation-fill-mode: forwards;
-    animation-play-state: v-bind(animation);  
+    animation-fill-mode: backwards;
+    animation-play-state: v-bind(animation);
 
 }
-.timer::after {
+.timer.animation::after {
     content: '';
     position: absolute;
     top: 0;
@@ -153,13 +181,13 @@ export default {
     z-index: 3;
     background-color: white;
     animation-name: mask_right;
-    animation-duration: v-bind(currentTime);
+    animation-duration: v-bind(duration);
     animation-timing-function: steps(1, end);
-    animation-fill-mode: forwards;
+    animation-fill-mode: backwards;
     animation-play-state: v-bind(animation);
 
 }
-.timer-line {
+.timer-line.animation {
     position: absolute;
     top: 0;
     left: 0;
@@ -167,10 +195,10 @@ export default {
     height: 100%;
     z-index: 2;
     animation-name: line;
-    animation-duration: v-bind(currentTime);
+    animation-duration: v-bind(duration);
     animation-timing-function: linear;
-    animation-fill-mode: forwards;
-    animation-play-state: v-bind(animation);    
+    animation-fill-mode: backwards;
+    animation-play-state: v-bind(animation);
 
 }
 .timer-line::after{
@@ -198,6 +226,16 @@ export default {
 .second{
     font-size: 48px;
     color: white;
+}
+.stage {   
+    transition: all 1s ease 0s;
+}
+.stage p{
+    font-size: 40px;
+    color: white;
+    text-align: center;
+    margin-top: 6vh;
+    text-transform: uppercase;
 }
 
 @keyframes line {

@@ -22,9 +22,9 @@ export default {
                     id: 0,
                     name: 'Light',
                     color: 'green',
-                    prep: 3,
-                    work: 6,
-                    rest: 3,
+                    prep: 2,
+                    work: 4,
+                    rest: 2,
                     cycles: 2,
                 },
                 {   
