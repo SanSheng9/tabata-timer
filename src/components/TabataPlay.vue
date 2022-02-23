@@ -25,31 +25,80 @@ export default {
             restPlayed: this.rest,
             cyclesPlayed: this.cycles,
             time: ((this.work + this.rest) * this.cycles) + this.prep,
-            currentTime: 0
+            currentTime: 0,
+            duration: 0,
         }
     },
     methods: { 
-        startTimer() {
-            this.currentTime = this.time
-            setTimeout(() => {
-             this.timer = setInterval(() => {
-            this.currentTime--}, 1000)   
-            }, 1000);
-            
-        },
-        stopTimer() {
-            clearTimeout(this.timer)
+        startTimer(cycl) {
+                let count = cycl
+                new Promise((resolve) => {
+                    // Preparation
+                let preparation = this.prep
+                if (this.cycles == count) {
+                console.log('Start Prep')
+                this.currentTime = preparation
+                this.timer = setInterval(() => {
+                this.currentTime--
+                if (this.currentTime <= 0)
+                    {
+                        resolve(console.log('Finish Prep'))
+                        clearTimeout(this.timer)  
+                    }
+                }, 1000)} else {
+                    resolve(console.log('No Prep'))
+                }
+                }).then(() => {
+                    // Work
+                    new Promise((resolve) => {
+                        console.log('Start Work')
+                        this.currentTime = this.work
+                        this.timer = setInterval(() => {
+                        this.currentTime--
+                        if (this.currentTime <= 0)
+                            {
+                            resolve(console.log('Finish Work'))
+                            clearTimeout(this.timer)  
+                    }
+                    }, 1000)
+                    }).then(() => {
+                        // Rest
+                        new Promise((resolve) => {
+                        console.log('Start Rest')
+                        this.currentTime = this.rest
+                        this.timer = setInterval(() => {
+                        this.currentTime--
+                        if (this.currentTime <= 0)
+                            {
+                            resolve(
+                            console.log('Finish Rest'))
+                            clearTimeout(this.timer)  
+                    }
+                    }, 1000)
+                    }).then(() => {
+                        new Promise((resolve) => {
+                        console.log('Cycles - ', count)
+                        if (count > 1) {
+                            count--
+                            resolve(
+                            this.startTimer(count))
+                        }
+                        })
+                    })
+                    })
+                    }
+                    )
         },
     },
     watch: {
         animation: function () {
-            this.startTimer()
+            this.startTimer(this.cycles)
         },
-        currentTime(time) {
-            if (time === 0) {
-                this.stopTimer()
-            }
-        }
+      //  currentTime(time) {
+        //    if (time === 0) {
+       //         this.stopTimer()
+       //     }
+       // }
     },
     
 }
@@ -87,9 +136,11 @@ export default {
     height: 100%;
     z-index: 3;
     background-color: #333;
-    animation: mask_left 1s steps(1, end) forwards;
+    animation-name: mask_left;
     animation-duration: v-bind(currentTime);
-      animation-play-state: v-bind(animation);  
+    animation-timing-function: steps(1, end);
+    animation-fill-mode: forwards;
+    animation-play-state: v-bind(animation);  
 
 }
 .timer::after {
@@ -101,10 +152,11 @@ export default {
     height: 100%;
     z-index: 3;
     background-color: white;
-    animation: mask_righ 1s steps(1, end) forwards;
-        animation-duration: v-bind(currentTime);
-
-      animation-play-state: v-bind(animation);  
+    animation-name: mask_right;
+    animation-duration: v-bind(currentTime);
+    animation-timing-function: steps(1, end);
+    animation-fill-mode: forwards;
+    animation-play-state: v-bind(animation);
 
 }
 .timer-line {
@@ -114,10 +166,11 @@ export default {
     width: 100%;
     height: 100%;
     z-index: 2;
-    animation: line 10s linear forwards;
-        animation-duration: v-bind(currentTime);
-
-      animation-play-state: v-bind(animation);  
+    animation-name: line;
+    animation-duration: v-bind(currentTime);
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    animation-play-state: v-bind(animation);    
 
 }
 .timer-line::after{
