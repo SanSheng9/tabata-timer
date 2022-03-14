@@ -1,5 +1,8 @@
 <template>
   <div class="tabata-timer">
+      <div class="all-time">
+          <p>{{secondsToHms(globalCurrentTime)}}</p>
+      </div>
       <div class="timer" :class='{animation: animClass}'>
         <div class="timer-line" :class='{animation: animClass}'></div>
         <div class="timer-body">
@@ -11,6 +14,9 @@
       </div>
       <div class="stage">
           <p>{{stage}}</p>
+      </div>
+      <div class="next-stage">
+          <p>{{nextStage}}</p>
       </div>
   </div>
 </template>
@@ -28,7 +34,10 @@ export default {
             currentTime: 0,
             duration: 0,
             animClass: true,
-            stage: ''
+            stage: '',
+            globalTimer: 0,
+            globalCurrentTime: 0, 
+            nextStage: ''
         }
     },
     methods: {
@@ -53,6 +62,7 @@ export default {
                 //            
                 this.duration = this.currentTime + 's'
                 this.stage = 'Preparation'
+                this.nextStage = 'Work'
                 this.timer = setInterval(() => {
                 this.currentTime--
                 if (this.currentTime <= 0)
@@ -67,6 +77,7 @@ export default {
                     // Work
                     new Promise((resolve) => {
                         console.log('Start Work')
+                        this.currentTime = 0
                         this.currentTime = this.work
                 //
                 this.addDeleteClass()  
@@ -74,6 +85,7 @@ export default {
                 //                                    
                         this.duration = this.currentTime + 's'
                         this.stage = 'Work'
+                        this. nextStage = 'Rest'
                         this.timer = setInterval(() => {
                         this.currentTime--
                         if (this.currentTime <= 0)
@@ -86,12 +98,14 @@ export default {
                         // Rest
                         new Promise((resolve) => {
                         console.log('Start Rest')
+                        this.currentTime = 0
                         this.currentTime = this.rest
                 //
                 this.addDeleteClass()  
                 //                                    
                         this.duration = this.currentTime + 's'
                         this.stage = 'Rest'
+                        if (count <= 1 ) {this.nextStage = 'Finish'} else {this.nextStage = 'Work'}
                         this.timer = setInterval(() => {
                         this.currentTime--
                         if (this.currentTime <= 0)
@@ -117,10 +131,27 @@ export default {
                     }
                     )
         },
+        startGlobalTimer(){
+                this.globalCurrentTime = ((this.work + this.rest) * this.cycles) + this.prep
+                this.globalTimer = setInterval(
+                    () => {
+                        this.globalCurrentTime--
+                        if ( this.globalCurrentTime <= 0) {clearTimeout(this.globalTimer)}
+                    }, 1000
+                )
+        },
+         secondsToHms(d) {
+            d = Number(d);
+            var h = Math.floor(d / 3600);
+            var m = Math.floor(d % 3600 / 60);
+            var s = Math.floor(d % 3600 % 60);
+            return ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
+        },
     },
     watch: {
         play: function () {
             this.startTimer(this.cycles)
+            this.startGlobalTimer()
         },
       //  currentTime(time) {
         //    if (time === 0) {

@@ -9,44 +9,41 @@
         </div>
         </div>
         <div class="buttons old" v-if="viewButtons == 'old'">
-        <div class="play">
-            <img src="@/assets/play.svg" alt="">
-        </div>
         <div class="set" @click="createTabata">
             <img src="@/assets/edit.svg" alt="">
         </div>     
       </div>
       <div class="form name">
       <label for="name">Name</label>
-      <my-input id="name" v-model="tabataName" :style="{minWidth: 80 + '%'}" :value='tabataName'></my-input>
+      <my-input id="name" v-model="tabataName" :style="{minWidth: 80 + '%'}" :value='tabataName' :maxlength='20'></my-input>
       </div>
       <div class="form prep">
         <label for="prep">Preparation</label>
         <div class="flex-box">
       <div class="plus" @click="tabataPrep++"><img src="@/assets/plus.svg" alt=""></div>
-      <my-input id="prep" v-model='tabataPrep' :value='tabataPrep'></my-input>
-      <div class="minus" @click="tabataPrep--" ><img src="@/assets/minus.svg" alt=""></div>      
+      <my-input id="prep" v-model='tabataPrep' :value='tabataPrep' :maxlength="2"></my-input>
+      <div class="minus" @click="minusNumber('prep')" ><img src="@/assets/minus.svg" alt=""></div>      
       </div></div>
         <div class="form work">
         <label for="work">Work</label>
                 <div class="flex-box">
         <div class="plus" @click="tabataWork++"><img src="@/assets/plus.svg" alt=""></div>
-      <my-input id="work" v-model='tabataWork'   :value='tabataWork'></my-input>
-      <div class="minus" @click="tabataWork--"><img src="@/assets/minus.svg" alt=""></div>      
+      <my-input id="work" v-model='tabataWork'   :value='tabataWork' :maxlength="2"></my-input>
+      <div class="minus" @click="minusNumber('work')"><img src="@/assets/minus.svg" alt=""></div>      
       </div></div>
         <div class="form rest">
         <label for="rest">Rest</label>
     <div class="flex-box">
     <div class="plus" @click="tabataRest++"><img src="@/assets/plus.svg" alt=""></div>
-      <my-input id="rest" v-model="tabataRest" :value='tabataRest'></my-input>
-      <div class="minus" @click="tabataRest--"><img src="@/assets/minus.svg" alt=""></div>      
+      <my-input id="rest" v-model="tabataRest" :value='tabataRest' :maxlength="2"></my-input>
+      <div class="minus" @click="minusNumber('rest')"><img src="@/assets/minus.svg" alt=""></div>      
        </div></div>
         <div class="form cycles">
         <label for="cycles">Cycles</label>
         <div class="flex-box">
         <div class="plus" @click="tabataCycles++"><img src="@/assets/plus.svg" alt=""></div>
-      <my-input id="cycles" v-model="tabataCycles" :value='tabataCycles'></my-input>
-      <div class="minus" @click="tabataCycles--"><img src="@/assets/minus.svg" alt=""></div>      
+      <my-input id="cycles" v-model="tabataCycles" :value='tabataCycles' :maxlength="1"></my-input>
+      <div class="minus" @click="minusNumber('cycles')"><img src="@/assets/minus.svg" alt=""></div>      
       </div></div>
         <div class="form color">
             <div class="color" :style="{paddingBottom: 10 + 'px'}">Color</div>
@@ -143,10 +140,34 @@ export default {
             console.log('1:', this.newTabata)
             if (this.viewButtons == 'new') {this.$emit('colorform', 'grey')} 
             this.$emit('edit')           
+        },
+        minusNumber(number){
+            if (number == 'prep') {
+                if (this.tabataPrep != 0) {
+                    this.tabataPrep--
+                }
+            }
+            if (number == 'work') {
+                if (this.tabataWork != 0) {
+                    this.tabataWork--
+                }
+            }
+            if (number == 'rest') {
+                if (this.tabataRest != 0) {
+                    this.tabataRest--
+                }
+            }
+            if (number == 'cycles') {
+                if (this.tabataCycles != 1) {
+                    this.tabataCycles--
+                }
+            }
         }
     }
 }
 </script>
+
+
 
 <style>
 .form{ 
