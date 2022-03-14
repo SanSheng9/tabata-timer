@@ -35,7 +35,7 @@ export default {
         addDeleteClass() {
                 this.animClass = false
                 console.log('animation')
-                setTimeout(() => {this.animClass = true}, 10)
+                setTimeout(() => {this.animClass = true}, 20)
         },
         finishTabata(){
             this.$emit('finish')
